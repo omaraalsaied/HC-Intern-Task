@@ -9,23 +9,26 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet  id="002-01"  author="omaraalsaied">
-        <createTable tableName="books">
+    <changeSet  id="005-01"  author="omaraalsaied">
+
+        <createTable tableName="borrow_history">
             <column name="id" type="int(11)" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="book_PK" unique="true"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="borrowHistory_PK" unique="true"/>
             </column>
-            <column name="title" type="varchar(255)">
-                <constraints nullable="false" />
+
+            <column name="borrower_id" type="bigint">
+                <constraints nullable="false"/>
             </column>
-            <column name="ISBN" type="varchar(255)" >
-                <constraints unique="true" nullable="false" />
-            </column>
-            <column name="author_id" type="bigint">
+
+            <column name="book_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="books" baseColumnNames="author_id" constraintName="fk_book_author" referencedTableName="authors"
+
+        <addForeignKeyConstraint baseTableName="borrow_history" baseColumnNames="book_id" constraintName="fk_borrower_history_book_id" referencedTableName="books"
+                                 referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="borrow_history" baseColumnNames="borrower_id" constraintName="fk_borrower_history_borrowers_id" referencedTableName="borrowers"
                                  referencedColumnNames="id" />
     </changeSet>
 
