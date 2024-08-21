@@ -19,7 +19,7 @@
             <column name="email" type="varchar(255)"  >
                 <constraints  nullable="false" unique="true" />
             </column>
-            <column name="membershipDate" type="date" >
+            <column name="membership_date" type="date" >
                 <constraints nullable="false" />
             </column>
         </createTable>
@@ -28,11 +28,4 @@
 
 
 
-    <changeSet id="003-02" author="omaraalsaied">
-    <dropColumn tableName="borrowers" columnName="membership_date"/>
-
-    <renameColumn tableName="borrowers"
-                  oldColumnName="membershipDate"
-                  newColumnName="membership_date"/>
-</changeSet>
 </databaseChangeLog>

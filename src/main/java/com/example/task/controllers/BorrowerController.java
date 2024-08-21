@@ -47,7 +47,7 @@ public class BorrowerController {
         Optional<Borrower> borrowerOptional = borrowerRepository.findById(id);
 
         if (borrowerOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrower not found");
         }
 
         borrowerDetails.setId(id);
@@ -60,7 +60,7 @@ public class BorrowerController {
         Optional<Borrower> borrowerOptional = borrowerRepository.findById(id);
 
         if (borrowerOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrower not found");
         }
 
         borrowerRepository.deleteById(id);
