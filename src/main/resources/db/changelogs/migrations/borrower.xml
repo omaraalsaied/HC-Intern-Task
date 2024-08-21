@@ -26,4 +26,13 @@
 
     </changeSet>
 
+
+
+    <changeSet id="003-02" author="omaraalsaied">
+    <dropColumn tableName="borrowers" columnName="membership_date"/>
+
+    <renameColumn tableName="borrowers"
+                  oldColumnName="membershipDate"
+                  newColumnName="membership_date"/>
+</changeSet>
 </databaseChangeLog>

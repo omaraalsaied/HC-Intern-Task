@@ -9,9 +9,5 @@ import java.util.Optional;
 @Service
 
 public interface AuthorService {
-    List<Author> findAll();
-    Optional<Author> getById(Long id);
-    Author create(Author author);
-    Author update(Author author);
-    Void delete(Long id);
+
 }

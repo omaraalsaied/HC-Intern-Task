@@ -42,7 +42,7 @@ public class AuthorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Author authorDetails) {
-        Optional<Author> authorOptional = authorService.getById(id);
+        Optional<Author> authorOptional = authorRepository.findById(id);
 
         if (authorOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found");

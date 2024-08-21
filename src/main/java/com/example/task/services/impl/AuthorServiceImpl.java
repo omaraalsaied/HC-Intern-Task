@@ -12,33 +12,4 @@ import java.util.Optional;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    @Autowired
-    private AuthorRepository authorRepository;
-
-    @Override
-    public List<Author> findAll() {
-        return authorRepository.findAll();
-    }
-
-    @Override
-    public Optional<Author> getById(Long id) {
-        return authorRepository.findById(id);
-    }
-
-    @Override
-    public Author create(Author author) {
-        return authorRepository.save(author);
-    }
-
-    @Override
-    public Author update(Author author) {
-        return authorRepository.save(author);
-    }
-
-    public Void delete(Long id)
-    {
-        authorRepository.deleteById(id);
-        return null;
-    }
-
 }
