@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface AuthorService {
     List<Author> findAll();
-    Optional<Author> getById(Long id);
-    Author create(Author author);
-    Author update(Author author);
+    Optional<Author> findById(Long id);
+    Optional<Author> saveOrUpdate(Author author);
+
     Void delete(Long id);
 }
