@@ -19,11 +19,13 @@
             <column name="email" type="varchar(255)"  >
                 <constraints  nullable="false" unique="true" />
             </column>
-            <column name="membershipDate" type="date" >
+            <column name="membership_date" type="date" >
                 <constraints nullable="false" />
             </column>
         </createTable>
 
     </changeSet>
+
+
 
 </databaseChangeLog>
