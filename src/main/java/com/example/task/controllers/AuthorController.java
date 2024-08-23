@@ -34,9 +34,10 @@ public class AuthorController {
     }
 
     @PostMapping
-    public Optional<Author> save(@RequestBody Author author)
+    public ResponseEntity<Optional<Author>> save(@RequestBody Author author)
     {
-        return authorService.saveOrUpdate(author);
+       Optional<Author> savedAuthor =  authorService.saveOrUpdate(author);
+       return ResponseEntity.ok(savedAuthor);
     }
 
     @PutMapping("/{id}")

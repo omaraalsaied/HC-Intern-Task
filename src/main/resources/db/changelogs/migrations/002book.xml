@@ -29,4 +29,12 @@
                                  referencedColumnNames="id" />
     </changeSet>
 
+    <changeSet id="001-02" author="omaraalsaied">
+        <insert tableName="books">
+            <column name="title" value="book 1"/>
+            <column name="isbn" value="ijrwqiu24"/>
+            <column name="author_id" value="1"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

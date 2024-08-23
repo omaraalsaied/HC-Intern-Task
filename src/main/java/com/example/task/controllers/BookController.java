@@ -1,9 +1,10 @@
 package com.example.task.controllers;
 
-import com.example.task.domains.Author;
 import com.example.task.domains.Book;
-import com.example.task.repositories.AuthorRepository;
 import com.example.task.repositories.BookRepository;
+import com.example.task.services.AuthorService;
+import com.example.task.services.BookService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,22 +15,22 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/books")
+@Log4j2
 public class BookController {
     @Autowired
+    private BookService bookService;
+    private AuthorService authorService;
     private BookRepository bookRepository;
-
-    @Autowired
-    private AuthorRepository authorRepository;
 
     @GetMapping
     public List<Book> findAll()
     {
-        return bookRepository.findAll();
+        return bookService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Book>> getBookById(@PathVariable Long id) {
-        Optional<Book> book = bookRepository.findById(id);
+        Optional<Book> book = bookService.findById(id);
         if(book.isEmpty())
         {
             ResponseEntity.notFound().build();
@@ -38,40 +39,43 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> save(@RequestBody Book book)
+    public ResponseEntity<Optional<Book>> save(@RequestBody Book book)
     {
-        Book savedBook = bookRepository.save(book);
-        return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
+        Optional<Book> savedBook = bookService.saveOrUpdate(book);
+        return ResponseEntity.ok(savedBook);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Book bookDetails) {
-        Optional<Book> bookOptional = bookRepository.findById(id);
-
-        if (bookOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
-        }
-
-        bookDetails.setId(id);
-        Book updatedBook = bookRepository.save(bookDetails);
-        return ResponseEntity.ok(updatedBook);
+        //TODO: recoding this this
+//        Optional<Book> bookOptional = bookService.findById(id);
+//
+//        if (bookOptional.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+//        }
+//
+//        bookDetails.setId(id);
+//        Book updatedBook = bookService.saveOrUpdate(bookDetails);
+        return ResponseEntity.ok(bookDetails);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
-        Optional<Book> bookOptional = bookRepository.findById(id);
+        Optional<Book> bookOptional = bookService.findById(id);
 
         if (bookOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
         }
 
-        bookRepository.deleteById(id);
+        bookService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/author")
-    public List<Book> getByAuthor(@RequestParam Long id)
-    {
-        return bookRepository.getByAuthorId(id);
-    }
+//    @GetMapping("/author")
+    // TODO: Create Searching By Author's ID
+//    public List<Book> getByAuthor(@RequestParam Long id)
+//    {
+//        return bookService.getByAuthorId(id);
+//    }
 }

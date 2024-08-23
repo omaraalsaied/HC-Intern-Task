@@ -1,18 +1,18 @@
 package com.example.task.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "authors")
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Author {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +26,7 @@ public class Author {
     @Column(nullable = false)
     private Date birthdate;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Book> booksList = new ArrayList<>();
+    @OneToMany(mappedBy = "author")
+    @JsonIgnore
+    private List<Book> books;
 }
