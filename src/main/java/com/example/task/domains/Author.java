@@ -1,6 +1,6 @@
 package com.example.task.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +26,7 @@ public class Author {
     @Column(nullable = false)
     private Date birthdate;
 
-    @OneToMany(mappedBy = "author")
-    @JsonIgnore
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("author")
     private List<Book> books;
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface BookService {
     List<Book> findAll();
     Optional<Book> findById(Long id);
-    Optional<Book> saveOrUpdate (Book book);
-    Void delete(Long id);
-    List<Object> findByAuthor(Long author_id);
+    Book saveOrUpdate (Book book);
+    void delete(Long id);
+    List<Book> findBooksByAuthor(Long author_id);
 }

@@ -19,6 +19,7 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
     private AuthorService authorService;
 
     @Override
@@ -32,21 +33,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> saveOrUpdate(Book book) {
-        Author author = authorService.findById(book.getAuthor().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Author with id doesn't exist"));
-        book.setAuthor(author);
-        return Optional.of(bookRepository.save(book));
+    public Book saveOrUpdate(Book book)  {
+        authorService.findById(book.getAuthor().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Author not Found"));
+        return bookRepository.save(book);
     }
 
     @Override
-    public Void delete(Long id) {
+    public void delete(Long id) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        if (bookOptional.isEmpty()) {
+           throw new EntityNotFoundException("book not found");
+        }
        bookRepository.deleteById(id);
-       return null;
     }
 
     @Override
-    public List<Object> findByAuthor(Long author_id) {
-        return List.of();
+    public List<Book> findBooksByAuthor(Long author_id)
+    {
+        Optional<Author> author = Optional.of(authorService.findById(author_id))
+                .orElseThrow(() -> new EntityNotFoundException("Author not found"));
+        log.info(author);
+        return bookRepository.findBooksByAuthor(author);
     }
 }

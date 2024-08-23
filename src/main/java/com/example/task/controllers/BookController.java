@@ -1,8 +1,6 @@
 package com.example.task.controllers;
 
 import com.example.task.domains.Book;
-import com.example.task.repositories.BookRepository;
-import com.example.task.services.AuthorService;
 import com.example.task.services.BookService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ import java.util.Optional;
 public class BookController {
     @Autowired
     private BookService bookService;
-    private AuthorService authorService;
-    private BookRepository bookRepository;
 
     @GetMapping
     public List<Book> findAll()
@@ -39,43 +35,41 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Optional<Book>> save(@RequestBody Book book)
+    public ResponseEntity<Book> save(@RequestBody Book book)
     {
-        Optional<Book> savedBook = bookService.saveOrUpdate(book);
+        log.info("request incoming on /api/books, Method: POST, Input is {}", book);
+        Book savedBook = bookService.saveOrUpdate(book);
+        log.info("record created successfully with the Id {}", savedBook.getId());
         return ResponseEntity.ok(savedBook);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Book bookDetails) {
-        //TODO: recoding this this
-//        Optional<Book> bookOptional = bookService.findById(id);
-//
-//        if (bookOptional.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
-//        }
-//
-//        bookDetails.setId(id);
-//        Book updatedBook = bookService.saveOrUpdate(bookDetails);
-        return ResponseEntity.ok(bookDetails);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Book bookDetails) {
+        Optional<Book> book = bookService.findById(id);
+        log.info("Request Incoming on /api/books/{}, Method: PUT Input is {}", id, bookDetails );
+        if (book.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+        }
+        bookDetails.setId(id);
+        Book updatedBook = bookService.saveOrUpdate(bookDetails);
+        log.info("book with id {} has been updated successfully", id);
+        return ResponseEntity.ok(updatedBook);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        Optional<Book> bookOptional = bookService.findById(id);
-
-        if (bookOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
-        }
-
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        log.info("Request Incoming on /api/books/{}, Method: Delete", id );
         bookService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        log.info("Book with the id {} has been deleted successfully", id);
+        return ResponseEntity.ofNullable("Book Deleted Successfully");
     }
 
-//    @GetMapping("/author")
-    // TODO: Create Searching By Author's ID
-//    public List<Book> getByAuthor(@RequestParam Long id)
-//    {
-//        return bookService.getByAuthorId(id);
-//    }
+    @GetMapping("/author/{author_id}")
+    public ResponseEntity<?> findAuthorBooks(@PathVariable Long author_id)
+    {
+        log.info("Request Incoming on /api/books/author/{}, Method: Get", author_id );
+        return ResponseEntity.ok(bookService.findBooksByAuthor(author_id));
+
+    }
 }

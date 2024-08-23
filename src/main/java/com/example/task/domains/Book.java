@@ -1,5 +1,6 @@
 package com.example.task.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,8 @@ public class Book {
     private String isbn;
 
     @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
+    @JsonIgnoreProperties("books")
+    @JoinColumn(name = "author_id",  nullable = false)
     private Author author;
 
 }
