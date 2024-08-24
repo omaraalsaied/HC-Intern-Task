@@ -1,6 +1,7 @@
 package com.example.task.controllers;
 
 import com.example.task.domains.Author;
+import com.example.task.exceptions.GeneralException;
 import com.example.task.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,14 +35,14 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Optional<Author>> save(@RequestBody Author author)
+    public ResponseEntity<Optional<Author>> save(@RequestBody Author author) throws GeneralException
     {
-       Optional<Author> savedAuthor =  authorService.saveOrUpdate(author);
-       return ResponseEntity.ok(savedAuthor);
+        Optional<Author> savedAuthor =  authorService.saveOrUpdate(author);
+        return ResponseEntity.ok(savedAuthor);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Author authorDetails) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Author authorDetails) throws GeneralException {
         Optional<Author> author = authorService.findById(id);
         if (author.isEmpty())
         {
