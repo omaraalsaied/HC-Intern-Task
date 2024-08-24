@@ -16,54 +16,43 @@ import java.util.Optional;
 @RequestMapping(path = "/api/borrowers")
 public class BorrowerController {
     @Autowired
-    private BorrowerRepository borrowerRepository;
-    @Autowired
     private BorrowerService borrowerService;
 
     @GetMapping
     public List<Borrower> findAll()
 
     {
-        return borrowerRepository.findAll();
+        return borrowerService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Borrower>> getBorrowerById(@PathVariable Long id) {
-        Optional<Borrower> borrower = borrowerRepository.findById(id);
-        if (borrower.isEmpty()) {
-            ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(borrower);
+
+        return ResponseEntity.ok(borrowerService.findById(id));
     }
 
     @PostMapping
-    public Borrower save(@RequestBody Borrower borrower)
+    public ResponseEntity<Optional<Borrower>> save(@RequestBody Borrower borrower)
     {
-        return borrowerRepository.save(borrower);
+         return new ResponseEntity<>(borrowerService.saveOrUpdate(borrower), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Borrower borrowerDetails) {
-        Optional<Borrower> borrowerOptional = borrowerRepository.findById(id);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Borrower borrowerDetails) {
+        Optional<Borrower> borrowerOptional = borrowerService.findById(id);
 
-        if (borrowerOptional.isEmpty()) {
+        if (borrowerOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrower not found");
-        }
 
         borrowerDetails.setId(id);
-        Borrower updatedAuthor = borrowerRepository.save(borrowerDetails);
-        return ResponseEntity.ok(updatedAuthor);
+        Optional<Borrower> updatedAuthor = borrowerService.saveOrUpdate(borrowerDetails);
+        return new ResponseEntity<>(borrowerService.saveOrUpdate(borrowerDetails), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        Optional<Borrower> borrowerOptional = borrowerRepository.findById(id);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
 
-        if (borrowerOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrower not found");
-        }
-
-        borrowerRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        borrowerService.delete(id);
+        return new ResponseEntity<>("Borrower Deleted Successfully",HttpStatus.NO_CONTENT);
     }
 }

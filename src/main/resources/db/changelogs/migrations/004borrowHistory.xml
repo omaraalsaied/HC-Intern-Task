@@ -31,5 +31,16 @@
         <addForeignKeyConstraint baseTableName="borrow_history" baseColumnNames="borrower_id" constraintName="fk_borrower_history_borrowers_id" referencedTableName="borrowers"
                                  referencedColumnNames="id" />
     </changeSet>
+    
+    <changeSet id="005-02" author="omaraalsaied">
+        <addColumn tableName="borrow_history">
+            <column name="borrow_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="borrow_history">
+            <column name="return_date" type="datetime"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

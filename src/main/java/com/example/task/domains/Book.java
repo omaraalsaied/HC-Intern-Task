@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "books")
 @AllArgsConstructor
@@ -26,5 +28,10 @@ public class Book {
     @JsonIgnoreProperties("books")
     @JoinColumn(name = "author_id",  nullable = false)
     private Author author;
+
+    @OneToMany(mappedBy = "book")
+    @JsonIgnoreProperties("book")
+    private List<BorrowHistory> borrowHistories;
+
 
 }
